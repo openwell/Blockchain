@@ -125,6 +125,8 @@ def mine():
     # handle non json responses
     values = request.get_json()
     # check that the required fields are in the posted data
+
+# 1 VALIDATION
     required_fields = ['proof', 'id']
     if not all(k in values for k in required_fields):
         response = {'message': "Missing Values"}
@@ -136,11 +138,13 @@ def mine():
     last_block = blockchain.last_block
     last_block_string = json.dumps(last_block, sort_keys=True).encode()
 
+# 2 VALIDATION after hash
     if blockchain.valid_proof(last_block_string, submitted_proof):
         # Forge the new Block by adding it to the chain
         previous_hash = blockchain.hash(last_block)
+# 3 NEW BLOCK after hash
         block = blockchain.new_block(submitted_proof, previous_hash)
-
+# 4 Reward from Where
         # reward the miner for work
         blockchain.new_transaction(sender="0", recipient=node_identifier, amount=1)
 
@@ -176,6 +180,7 @@ def last_block():
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
     # get the values in json format
+# 1 VALIDATION
     values = request.get_json()
     # check that the required fields exist
     required_fields = ['sender', 'recipient', 'amount']
@@ -183,7 +188,7 @@ def new_transaction():
     if not all(k in values for k in required_fields):
         response = { 'message': 'Error Missing values' }
         return jsonify(response), 400
-
+# 2 ADD to transcation
     # create a new transaction
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 

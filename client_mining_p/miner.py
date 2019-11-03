@@ -51,7 +51,7 @@ if __name__ == '__main__':
         node = "http://localhost:5000"
 
     # Load ID
-    f = open("my_id.txt", "r")
+    f = open("client_mining_p/my_id.txt", "r")
     id = f.read()
     print("ID is", id)
     f.close()
